@@ -13,16 +13,44 @@ class Node:
     def __repr__(self):
         return str(self.data)
 
-#recursive function to check if two trees are identical or not
+def is_node_equal(node1,node2):
+    return (node1 and node2 and node1.data==node2.data)
+
+#iterative function to check if two trees are identical or not
 
 def isIdentical(root1, root2):
+    #if both tree are null return true
     if (not root1 and not root2):
         return True
-    if (root1 and root2) and (root1.data == root2.data):
-        print("here:",root1.data,root2.data)
-        return isIdentical(root1.left, root2.left) and isIdentical(root1.right, root2.right)
-    else :
+    # if one of the child is None then return false
+    if (not root1 and root2) or (root1 and not root2):
         return False
+    #create a stack to hold the node pairs
+    stack = [[root1,root2]]
+    
+    #loop till the stack is not empty
+    while len(stack) > 0:
+        node_array = stack.pop()
+        node1 = node_array.pop()
+        node2 = node_array.pop()
+        #if both the values are not eqaul return False
+        if not is_node_equal(node1,node2):
+            return False
+        #push left node pair if exists
+        if node1.left and node2.left:
+            stack.append([node1.left, node2.left])
+        #if ony once exists then return false
+        elif node1.left or node2.left:
+            return False
+
+        #push the right node pair 
+        if node1.right and node2.right:
+            stack.append([node1.right, node2.right])
+        elif node1.right or node2.right:
+            return False
+
+    return True
+
 
 
 
